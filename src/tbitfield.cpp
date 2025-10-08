@@ -117,31 +117,30 @@ int TBitField::operator!=(const TBitField& bf) const // сравнение
 
 TBitField TBitField::operator|(const TBitField& bf)  // операция "или"
 {
-    int maxLen = std::max(BitLen, bf.BitLen);
-    TBitField res(maxLen);
+    int maxBitLen = std::max(BitLen, bf.BitLen);
+    int minMemLen = std::min(MemLen, bf.MemLen);
+    int maxMemLen = std::max(MemLen, bf.MemLen);
+    TBitField result(maxBitLen);
 
-    // копируем биты обоих операндов в результат
-    for (int i = 0; i < res.MemLen; ++i)
-    {
-        TELEM left = (i < MemLen) ? pMem[i] : 0;
-        TELEM right = (i < bf.MemLen) ? bf.pMem[i] : 0;
-        res.pMem[i] = left | right;
-    }
-    return res;
+    for (int i = 0; i < minMemLen; i++)
+        result.pMem[i] = pMem[i] | bf.pMem[i];
+
+    for (int i = minMemLen; i < maxMemLen; i++)
+        result.pMem[i] = BitLen > bf.BitLen ? pMem[i] : bf.pMem[i];
+
+    return result;
 }
 
 TBitField TBitField::operator&(const TBitField& bf) // операция "и"
 {
-    int maxLen = std::max(BitLen, bf.BitLen);
-    TBitField res(maxLen);
+    int maxBitLen = std::max(BitLen, bf.BitLen);
+    int minMemLen = std::min(MemLen, bf.MemLen);
+    TBitField result(maxBitLen);
 
-    for (int i = 0; i < res.MemLen; ++i)
-    {
-        TELEM left = (i < MemLen) ? pMem[i] : 0;
-        TELEM right = (i < bf.MemLen) ? bf.pMem[i] : 0;
-        res.pMem[i] = left & right;
-    }
-    return res;
+    for (int i = 0; i < minMemLen; i++)
+        result.pMem[i] = pMem[i] & bf.pMem[i];
+
+    return result;
 }
 
 TBitField TBitField::operator~(void) // отрицание
