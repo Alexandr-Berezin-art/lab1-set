@@ -21,6 +21,7 @@ private:
 	TELEM* pMem; // память для представления битового поля
 	int  MemLen; // к-во эл-тов Мем для представления бит.поля
 	const int count_bits = sizeof(TELEM) * 8;
+	const int power_bits = std::log2(count_bits);
 	// методы реализации
 	int   GetMemIndex(const int n) const; // индекс в pМем для бита n       (#О2)
 	TELEM GetMemMask(const int n) const; // битовая маска для бита n       (#О3)
